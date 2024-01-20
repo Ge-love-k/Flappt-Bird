@@ -2,46 +2,46 @@ import pygame
 import random
 pygame.init()
 
-NE_OTDAM = 336
-KOTYARA = 540
+WIDTH = 336
+HEIGHT = 540
 CS = 60
 WHITE = (255, 255, 255)
 
-macos = pygame.display.set_mode((NE_OTDAM, KOTYARA))
+macos = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 pygame.display.set_caption('Flappy Bird')
 class Fon():
     def __init__(self):
         self.image = pygame.image.load('background.png')
         self.x1 = 0
-        self.x2 = NE_OTDAM
+        self.x2 = WIDTH
     def draw(self):
         macos.blit(self.image, (self.x1, 0))
         macos.blit(self.image, (self.x2, 0))
     def update(self):
         self.x1 -= 1
         self.x2 -= 1
-        if self.x1 <= -NE_OTDAM:
-            self.x1 = NE_OTDAM
-        if self.x2 <= -NE_OTDAM:
-            self.x2 = NE_OTDAM
+        if self.x1 <= -WIDTH:
+            self.x1 = WIDTH
+        if self.x2 <= -WIDTH:
+            self.x2 = WIDTH
 
 class Ground():
     def __init__(self):
         self.image = pygame.image.load('ground.png')
         self.x1 = 0
-        self.x2 = NE_OTDAM
-        self.y = KOTYARA - 100
+        self.x2 = WIDTH
+        self.y = HEIGHT - 100
     def draw(self):
         macos.blit(self.image, (self.x1, self.y))
         macos.blit(self.image, (self.x2, self.y))
     def update(self):
         self.x1 -= 2
         self.x2 -= 2
-        if self.x1 <= -NE_OTDAM:
-            self.x1 = NE_OTDAM
-        if self.x2 <= -NE_OTDAM:
-            self.x2 = NE_OTDAM            
+        if self.x1 <= -WIDTH:
+            self.x1 = WIDTH
+        if self.x2 <= -WIDTH:
+            self.x2 = WIDTH            
     
 class Ptica(pygame.sprite.Sprite):
     def __init__(self):
@@ -50,8 +50,8 @@ class Ptica(pygame.sprite.Sprite):
         self.image = self.image_orig
         self.angle = 0
         self.rect = self.image.get_rect(center = (
-            NE_OTDAM // 3,
-            KOTYARA // 2))
+            WIDTH // 3,
+            HEIGHT // 2))
         self.BaseSpeed = -2
         self.speed = self.BaseSpeed
 
@@ -77,8 +77,8 @@ class Ptica(pygame.sprite.Sprite):
         if self.rect.y < 0:
             self.rect.y = 0
             game.state = 'over'
-        if self.rect.bottom > KOTYARA-100:
-            self.rect.bottom = KOTYARA-100
+        if self.rect.bottom > HEIGHT-100:
+            self.rect.bottom = HEIGHT-100
             game.state = 'over'
         if game.state == 'play':
             for eak in events:
@@ -89,15 +89,15 @@ class Ptica(pygame.sprite.Sprite):
                 self.angle = -45
 class Mario():
     def __init__(self):
-        self.gate = random.randint(100, KOTYARA - 200)
+        self.gate = random.randint(100, HEIGHT - 200)
         self.gap = random.randint(45, 55)
         self.top_image = pygame.image.load('top-pipe.png')
         self.top_rect = self.top_image.get_rect()
-        self.top_rect.bottomleft = (NE_OTDAM, self.gate-self.gap)
+        self.top_rect.bottomleft = (WIDTH, self.gate-self.gap)
 
         self.bot_image = pygame.image.load('bot-pipe.png')
         self.bot_rect = self.bot_image.get_rect()
-        self.bot_rect.topleft =  (NE_OTDAM, self.gate+self.gap)
+        self.bot_rect.topleft =  (WIDTH, self.gate+self.gap)
 
     def draw(self):
         macos.blit(self.top_image, self.top_rect)
@@ -108,9 +108,9 @@ class Mario():
         self.bot_rect.x -= 2
         if self.top_rect.right < 0:
             self.gap = random.randint(45, 55)
-            self.gate = random.randint(100, KOTYARA - 200)
-            self.top_rect.bottomleft = (NE_OTDAM, self.gate-self.gap)
-            self.bot_rect.topleft =  (NE_OTDAM, self.gate+self.gap)
+            self.gate = random.randint(100, HEIGHT - 200)
+            self.top_rect.bottomleft = (WIDTH, self.gate-self.gap)
+            self.bot_rect.topleft =  (WIDTH, self.gate+self.gap)
             game.score += 1
             game.update_score()
 
@@ -123,10 +123,10 @@ class GameManager():
         self.score_text = self.font.render('0', True, (0,0,0))
         self.restart_text = self.font2.render('Нажми R для рестарта!', True, (0,0,0))
     def centerx(self, surf):
-        return (NE_OTDAM // 2) - (surf.get_width() // 2)
+        return (WIDTH // 2) - (surf.get_width() // 2)
     
     def centery(self, surf):
-        return (KOTYARA // 2) - (surf.get_width() // 2)
+        return (HEIGHT // 2) - (surf.get_width() // 2)
     
     def draw_score(self):
         macos.blit(self.score_text, (self.centerx(self.score_text), 10))
@@ -141,13 +141,13 @@ class GameManager():
         self.state = 'play'
         self.score = 0
         self.update_score()
-        bird.rect.center = (NE_OTDAM // 3, KOTYARA // 2)
+        bird.rect.center = (WIDTH // 3, HEIGHT // 2)
         bird.speed = bird.BaseSpeed
         bird.angle = 0
         pipe.gap = random.randint(45, 55)
-        pipe.gate = random.randint(100, KOTYARA - 200)
-        pipe.top_rect.bottomleft = (NE_OTDAM, pipe.gate-pipe.gap)
-        pipe.bot_rect.topleft =  (NE_OTDAM, pipe.gate+pipe.gap)
+        pipe.gate = random.randint(100, HEIGHT - 200)
+        pipe.top_rect.bottomleft = (WIDTH, pipe.gate-pipe.gap)
+        pipe.bot_rect.topleft =  (WIDTH, pipe.gate+pipe.gap)
 
 
 bg = Fon()
